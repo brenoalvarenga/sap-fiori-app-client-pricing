@@ -1,8 +1,86 @@
 <mvc:View
    controllerName="ui5.walkthrough.controller.App"
+   displayBlock="true"
    xmlns="sap.m"
+   xmlns:core="sap.ui.core"
    xmlns:mvc="sap.ui.core.mvc">
-   <Button
-      text="Say Hello"
-      press=".onShowHello"/>
+
+   <App>
+      <Page
+         id="page"
+         showHeader="true" >
+
+         <customHeader>
+            <Bar>
+               <contentLeft>
+                  <Title text="Client Pricing Manager" />
+               </contentLeft>
+               <contentRight>
+                  <Text text="Maio 28, 2025" />
+               </contentRight>
+            </Bar>
+         </customHeader>
+
+         <content>
+            <Panel headerText="Adicionar novo cliente" expandable="false" width="30%">
+               <VBox renderType="Div" width="100%" fitContainer="true" >
+
+                 <!-- Cliente: label above input -->
+                 <VBox width="100%" class="sapUiSmallMarginBottom">
+                   <Label text="Cliente" labelFor="inputCliente" />
+                   <Input id="inputCliente" width="100%" />
+                 </VBox>
+
+                 <!-- Preço mínimo e Quantidade side by side -->
+                 <HBox alignItems="Center" justifyContent="SpaceBetween" width="100%">
+                   <VBox width="48%">
+                     <Label text="Preço mínimo (USD/ton)" labelFor="inputPrecoMin" />
+                     <Input id="inputPrecoMin" width="100%" type="Number" />
+                   </VBox>
+                   <VBox width="48%">
+                     <Label text="Quantidade (tons)" labelFor="inputQuantidade" />
+                     <Input id="inputQuantidade" width="100%" type="Number" />
+                   </VBox>
+                 </HBox>
+
+                 <!-- Preço negociado: label above input -->
+                 <VBox width="100%" class="sapUiSmallMarginBottom">
+                   <Label text="Preço negociado (USD/ton)" labelFor="inputPrecoNegociado" />
+                   <Input id="inputPrecoNegociado" width="100%" type="Number" />
+                 </VBox>
+
+                 <!-- Desconto % e USD side by side -->
+                 <HBox alignItems="Center" justifyContent="SpaceBetween" width="100%">
+                   <VBox width="48%">
+                     <Label text="Desconto (%)" labelFor="inputDescontoPerc" />
+                     <Input id="inputDescontoPerc" width="100%" type="Number" />
+                   </VBox>
+                   <VBox width="48%">
+                     <Label text="Desconto (USD/ton)" labelFor="inputDescontoUsd" />
+                     <Input id="inputDescontoUsd" width="100%" type="Number" />
+                   </VBox>
+                 </HBox>
+
+                 <MessageStrip
+                   id="warningMessage"
+                   text="Preço negociado não pode ser menor que preço mínimo!"
+                   type="Warning"
+                   showIcon="true"
+                   visible="false"
+                   class="sapUiSmallMarginTop" />
+
+                 <!-- Submit button -->
+                 <Button
+                   text="Registrar Cliente"
+                   type="Emphasized"
+                   width="100%"
+                   press="onRegisterClient"
+                   class="sapUiSmallMarginTop" />
+
+               </VBox>
+            </Panel>
+         </content>
+
+      </Page>
+   </App>
 </mvc:View>
