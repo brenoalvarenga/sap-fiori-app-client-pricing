@@ -16,6 +16,21 @@ sap.ui.define(
         const sDescontoPerc = oView.byId("inputDescontoPerc").getValue();
         const sDescontoUsd = oView.byId("inputDescontoUsd").getValue();
 
+        // Convert input values to numbers
+        const negotiatedPrice = parseFloat(sPrecoNegociado) || 0;
+        const discountPercent = parseFloat(sDescontoPerc) || 0;
+        const discountAmount = parseFloat(sDescontoUsd) || 0;
+        const quantity = parseFloat(sQuantidade) || 0;
+
+        // Calculate the net value
+        const afterPercentDiscount =
+          negotiatedPrice * (1 - discountPercent / 100);
+        const afterAmountDiscount = Math.max(
+          0,
+          afterPercentDiscount - discountAmount
+        );
+        const netValue = afterAmountDiscount * quantity;
+
         // Compose a display message with the values
         const sMessage =
           `Cliente: ${sCliente}\n` +
@@ -23,7 +38,8 @@ sap.ui.define(
           `Quantidade (tons): ${sQuantidade}\n` +
           `Preço negociado (USD/ton): ${sPrecoNegociado}\n` +
           `Desconto (%): ${sDescontoPerc}\n` +
-          `Desconto (USD/ton): ${sDescontoUsd}`;
+          `Desconto (USD/ton): ${sDescontoUsd}\n` +
+          `Valor líquido (USD): ${netValue.toFixed(2)}`;
 
         // Show the message toast with collected input values
         MessageToast.show(sMessage);

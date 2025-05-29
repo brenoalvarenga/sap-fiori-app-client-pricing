@@ -19,11 +19,12 @@
          <content>
             <HBox alignItems="Start" width="100%" height="100%" gap="2rem">
                <!-- Painel de cadastro (30%) -->
-               <Panel headerText="Adicionar novo cliente" expandable="false" class="sapUiSmallMarginEnd">
+               <Panel expandable="false" class="sapUiSmallMarginEnd">
                   <layoutData>
                      <FlexItemData growFactor="3" />
                   </layoutData>
                   <VBox renderType="Div" width="100%">
+                     <Title text="Adicionar novo cliente" level="H2" class="sapUiSmallMarginBottom" />
                      <VBox width="100%" class="sapUiSmallMarginBottom">
                         <Label text="Cliente" labelFor="inputCliente" />
                         <Input id="inputCliente" width="100%" />
@@ -69,25 +70,71 @@
                </Panel>
 
                <!-- Painel de clientes registrados (70%) -->
-               <Panel headerText="Clientes registrados" expandable="false">
-                  <layoutData>
-                     <FlexItemData growFactor="7" />
-                  </layoutData>
-                  <VBox alignItems="Center" class="sapUiMediumMargin">
-                     <VBox width="100%">
-                        <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
-                           <Title text="Clientes registrados" level="H2" />
-                           <ObjectStatus id="client-count" text="0 clients" state="None" />
-                        </HBox>
-                        <VBox id="clients-container" class="sapUiTinyMarginTop" width="100%">
-                           <VBox class="sapUiMediumMarginTop sapUiContentPadding sapUiTinyMarginBottom" alignItems="Center" justifyContent="Center">
-                              <Text text="No clients registered yet" class="sapUiTinyMarginBottom" />
-                              <Text text="Add your first client using the form" design="Small" />
+               <VBox width="100%">
+                  <Panel expandable="false">
+                     <layoutData>
+                        <FlexItemData growFactor="7" />
+                     </layoutData>
+                     <VBox alignItems="Center" class="sapUiMediumMargin">
+                        <VBox width="100%">
+                           <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+                              <Title text="Clientes registrados" level="H2" />
+                              <ObjectStatus id="client-count" text="0 clients" state="None" />
+                           </HBox>
+                           <VBox id="clients-container" class="sapUiTinyMarginTop" width="100%">
+                              <VBox class="sapUiMediumMarginTop sapUiContentPadding sapUiTinyMarginBottom" alignItems="Center" justifyContent="Center">
+                                 <Text text="No clients registered yet" class="sapUiTinyMarginBottom" />
+                                 <Text text="Add your first client using the form" design="Small" />
+                              </VBox>
                            </VBox>
                         </VBox>
                      </VBox>
-                  </VBox>
-               </Panel>
+                  </Panel>
+
+                  <!-- Painel de resumo -->
+                  <Panel expandable="false" class="sapUiSmallMarginTop">
+                     <layoutData>
+                        <FlexItemData growFactor="7" />
+                     </layoutData>
+                     <VBox width="100%" class="sapUiContentPadding">
+                        <Title text="Resumo" level="H2" class="sapUiSmallMarginBottom" />
+                        <Table id="summaryTable" inset="false" width="100%" noDataText="No data available">
+                           <columns>
+                              <Column>
+                                 <Text text="Cliente" />
+                              </Column>
+                              <Column>
+                                 <Text text="Preço mínimo" />
+                              </Column>
+                              <Column>
+                                 <Text text="Quantidade" />
+                              </Column>
+                              <Column>
+                                 <Text text="Preço negociado" />
+                              </Column>
+                              <Column>
+                                 <Text text="Descontos" />
+                              </Column>
+                              <Column>
+                                 <Text text="Valor net" />
+                              </Column>
+                           </columns>
+                           <items>
+                              <ColumnListItem>
+                                 <cells>
+                                    <Text text="-" />
+                                    <Text text="-" />
+                                    <Text text="-" />
+                                    <Text text="-" />
+                                    <Text text="-" />
+                                    <Text text="-" />
+                                 </cells>
+                              </ColumnListItem>
+                           </items>
+                        </Table>
+                     </VBox>
+                  </Panel>
+               </VBox>
             </HBox>
          </content>
       </Page>
