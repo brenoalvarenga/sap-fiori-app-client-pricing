@@ -9,7 +9,9 @@
          <customHeader>
             <Bar>
                <contentLeft>
-                  <Title text="Client Pricing Manager" />
+                  <ObjectHeader
+                     title="Client Pricing Simulator"
+                     icon="sap-icon://tags" />                  
                </contentLeft>
                <contentRight>
                   <Text text="Maio 28, 2025" />
@@ -83,8 +85,8 @@
                            </HBox>
                            <VBox id="clients-container" class="sapUiTinyMarginTop" width="100%">
                               <VBox class="sapUiMediumMarginTop sapUiContentPadding sapUiTinyMarginBottom" alignItems="Center" justifyContent="Center">
-                                 <Text text="No clients registered yet" class="sapUiTinyMarginBottom" />
-                                 <Text text="Add your first client using the form" design="Small" />
+                                 <Text text="Nenhum cliente registrado" class="sapUiTinyMarginBottom" />
+                                 <Text text="Adicione o primeiro cliente através do formulário" design="Small" />
                               </VBox>
                            </VBox>
                         </VBox>
