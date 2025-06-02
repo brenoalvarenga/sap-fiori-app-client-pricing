@@ -3,7 +3,8 @@
    displayBlock="true"
    xmlns="sap.m"
    xmlns:core="sap.ui.core"
-   xmlns:mvc="sap.ui.core.mvc">
+   xmlns:mvc="sap.ui.core.mvc"
+   xmlns:u="sap.ui.unified">
    <App>
       <Page id="page" showHeader="true" class="sapUiContentPadding">
          <customHeader>
@@ -27,6 +28,14 @@
                   </layoutData>
                   <VBox renderType="Div" width="100%">
                      <Title text="Adicionar novo cliente" level="H2" class="sapUiSmallMarginBottom" />
+                     <VBox width="100%" class="sapUiSmallMarginBottom">
+                        <Label text="PDF" labelFor="fileUploader" />
+                        <u:FileUploader
+			                  id="fileUploader"
+			                  name="myFileUpload"
+			                  tooltip="Upload your file to the local server"
+                           width="100%"/>
+                     </VBox>
                      <VBox width="100%" class="sapUiSmallMarginBottom">
                         <Label text="Cliente" labelFor="inputCliente" />
                         <Input id="inputCliente" width="100%" />
