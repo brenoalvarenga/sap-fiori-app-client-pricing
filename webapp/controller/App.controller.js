@@ -28,6 +28,7 @@ sap.ui.define(
         this._clients = [];
         this._clientsContainer = this.byId("clients-container");
         this._clientCountElement = this.byId("client-count");
+        this._summaryTable = this.byId("summaryTable");
       },
 
       onRegisterClient: function () {
@@ -225,7 +226,7 @@ sap.ui.define(
                 "background-color: #eef5ff; border-radius: 8px; padding: 1rem;",
               items: [
                 new Text({
-                  text: "Net Value:",
+                  text: "Net Value: ",
                   class: "sapUiSmallMarginEnd",
                   design: "Bold",
                 }),
@@ -276,6 +277,37 @@ sap.ui.define(
             this._clients.length !== 1 ? "s" : ""
           }`
         );
+
+        // Update the summary table as well:
+        this.updateSummaryTable();
+      },
+
+      updateSummaryTable: function () {
+        const oTable = this._summaryTable;
+        oTable.removeAllItems();
+
+        if (this._clients.length === 0) {
+          // Table noDataText will show automatically
+          return;
+        }
+
+        this._clients.forEach((client) => {
+          const oItem = new sap.m.ColumnListItem({
+            cells: [
+              new sap.m.Text({ text: client.name }),
+              new sap.m.Text({ text: `$${client.minPrice.toFixed(2)}` }),
+              new sap.m.Text({ text: client.quantity.toFixed(2) }),
+              new sap.m.Text({ text: `$${client.negotiatedPrice.toFixed(2)}` }),
+              new sap.m.Text({
+                text: `${client.discountPercent.toFixed(
+                  2
+                )}% + $${client.discountAmount.toFixed(2)}`,
+              }),
+              new sap.m.Text({ text: `$${client.netValue.toFixed(2)}` }),
+            ],
+          });
+          oTable.addItem(oItem);
+        });
       },
     });
   }
