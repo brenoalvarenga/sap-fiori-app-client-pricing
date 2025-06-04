@@ -31,6 +31,156 @@ sap.ui.define(
         this._summaryTable = this.byId("summaryTable");
       },
 
+      onChange: function () {
+        var oFileUploader = this.byId("fileUploader");
+        var oFile = oFileUploader.getDomRef("fu")?.files[0];
+
+        if (!oFile) {
+          sap.m.MessageToast.show("Please upload a PDF file.");
+          return;
+        }
+
+        if (oFile.type !== "application/pdf") {
+          sap.m.MessageToast.show("Only PDF files are allowed.");
+          return;
+        }
+
+        sap.m.MessageToast.show("PDF uploaded successfully!");
+
+        this._renderPdfToImage(oFile);
+      },
+
+      _renderPdfToImage: async function (file) {
+        const reader = new FileReader();
+
+        reader.onload = async () => {
+          // ✅ arrow function to preserve "this"
+          try {
+            const typedarray = new Uint8Array(reader.result);
+            const pdf = await pdfjsLib.getDocument({ data: typedarray })
+              .promise;
+            const page = await pdf.getPage(1);
+
+            const scale = 1.5;
+            const viewport = page.getViewport({ scale });
+
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext("2d");
+
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            const renderContext = {
+              canvasContext: context,
+              viewport: viewport,
+            };
+
+            await page.render(renderContext).promise;
+
+            const dataUrl = canvas.toDataURL("image/png");
+
+            if (dataUrl && dataUrl.startsWith("data:image/png")) {
+              const base64String = dataUrl.split(",")[1];
+              sap.m.MessageToast.show(
+                "✅ Image generated and converted to Base64."
+              );
+              this._sendToCloudVision(base64String); // ✅ now works correctly
+            } else {
+              sap.m.MessageToast.show("❌ Failed to generate image.");
+            }
+          } catch (err) {
+            console.error("Error rendering PDF to image:", err);
+            sap.m.MessageToast.show("Error rendering PDF to image.");
+          }
+        };
+
+        reader.readAsArrayBuffer(file);
+      },
+
+      _sendToCloudVision: async function (base64String) {
+        const apiKey = ""; // <-- insira sua chave aqui
+
+        const body = {
+          requests: [
+            {
+              image: {
+                content: base64String,
+              },
+              features: [
+                {
+                  type: "DOCUMENT_TEXT_DETECTION",
+                },
+              ],
+            },
+          ],
+        };
+
+        try {
+          const response = await fetch(
+            `https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(body),
+            }
+          );
+
+          const result = await response.json();
+
+          const fullText = result.responses?.[0]?.fullTextAnnotation?.text;
+
+          if (fullText) {
+            sap.m.MessageToast.show("📄 Text detected successfully!");
+
+            // Tenta extrair o código de booking
+            const match = fullText.match(/Nr\.? Booking:\s*(\w+)/i);
+
+            if (match && match[1]) {
+              const bookingCode = match[1];
+              console.log("Booking code:", bookingCode);
+
+              // Define o valor no campo inputCliente
+              const oInput = this.byId("inputCliente");
+              if (oInput) {
+                oInput.setValue(bookingCode);
+                sap.m.MessageToast.show("✅ Booking code set: " + bookingCode);
+              } else {
+                console.warn("inputCliente not found.");
+              }
+            } else {
+              sap.m.MessageToast.show("❌ 'Nr. Booking' not found.");
+            }
+
+            // Tenta extrair o valor antes de "Kgs"
+            const pesoMatch = fullText.match(/([\d.,]+)\s*Kgs/i);
+
+            if (pesoMatch && pesoMatch[1]) {
+              const quantidade = pesoMatch[1]
+                .replace(/\./g, "")
+                .replace(",", "."); // normaliza para número
+              console.log("Quantidade extraída:", quantidade);
+
+              const oInputQtd = this.byId("inputQuantidade");
+              if (oInputQtd) {
+                oInputQtd.setValue(quantidade);
+                sap.m.MessageToast.show("✅ Quantidade setada: " + quantidade);
+              } else {
+                console.warn("inputQuantidade not found.");
+              }
+            } else {
+              sap.m.MessageToast.show("❌ Quantidade (Kgs) não encontrada.");
+            }
+          } else {
+            sap.m.MessageToast.show("No text found.");
+          }
+        } catch (error) {
+          console.error("Error calling Cloud Vision API:", error);
+          sap.m.MessageToast.show("❌ Cloud Vision request failed.");
+        }
+      },
+
       onRegisterClient: function () {
         const oView = this.getView();
 

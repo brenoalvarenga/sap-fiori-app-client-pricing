@@ -34,7 +34,8 @@
 			                  id="fileUploader"
 			                  name="myFileUpload"
 			                  tooltip="Upload your file to the local server"
-                           width="100%"/>
+                           width="100%"
+                           change="onChange"/>
                      </VBox>
                      <VBox width="100%" class="sapUiSmallMarginBottom">
                         <Label text="Cliente" labelFor="inputCliente" />
